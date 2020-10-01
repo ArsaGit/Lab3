@@ -14,15 +14,8 @@ namespace Lab3
 
             //функция y=x^2+2x-3
             Console.WriteLine("Функция y=x^2+2x-3");
-            //ввод x0
-            Console.WriteLine("Введите минимальное значение Х:");
-            GetInput(ref begin);
-            //ввод х
-            Console.WriteLine("Введите максимальное значение Х:");
-            GetInput(ref end);
-            //ввод шага построения
-            Console.WriteLine("Введите шаг построения Х:");
-            GetInput(ref step);
+            //ввод значений
+            GetInput(ref begin, ref end, ref step);
 
             //получение кол-ва значений Х
             size = GetSize(begin, end, step);
@@ -40,15 +33,16 @@ namespace Lab3
         }
 
         //метод ввода
-        static void GetInput(ref double B)
+        static void GetVar(ref double B)
         {
             string A;
             do
             {
                 A = Console.ReadLine();
+                A = A.Replace('.', ',');            //проверка на точку
             } while (!double.TryParse(A, out B));
         }
-
+        //получение кол-ва значений функции
         static int GetSize(double begin, double end,double step)
         {
             int size = 0;
@@ -60,6 +54,24 @@ namespace Lab3
             return size;
         }
 
+        //начальное значение диапазона не может быть больше конечного
+        static void GetInput(ref double begin, ref double end, ref double step)
+        {
+            do
+            {
+                //ввод x0
+                Console.WriteLine("Введите минимальное значение Х:");
+                GetVar(ref begin);
+                //ввод х
+                Console.WriteLine("Введите максимальное значение Х:");
+                GetVar(ref end);
+                //ввод шага построения
+                Console.WriteLine("Введите шаг построения Х:");
+                GetVar(ref step);
+            } while (begin > end);
+        }
+
+        //получение значений Х
         static double[] GetX(double begin,int size, double step)
         {
             double[] X = new double[size];
@@ -96,7 +108,7 @@ namespace Lab3
             return MaxVarLength;
         }
 
-
+        //метод вывода таблицы
         static void ShowTable(double[] X, double[] Y, int size)
         {
             int xml = GetMaxVarLength(X, size);
@@ -112,8 +124,8 @@ namespace Lab3
             }
             Console.WriteLine('|' + CreateStr(xml) + '|' + CreateStr(yml) + '|');
         }
-
-        static string CreateStr(double num,int max_length)
+        //наполнение таблицы
+        static string CreateStr(double num,int max_length)  //для чисел
         {
             num = Math.Round(num, 3);
             string num_str = Convert.ToString(num);
@@ -126,7 +138,7 @@ namespace Lab3
 
             return (s + num_str + e);
         }
-        static string CreateStr(string str, int max_length)
+        static string CreateStr(string str, int max_length) //для строк
         {
             //string num_str = Convert.ToString(num);
             int middle = str.Length;
@@ -138,7 +150,7 @@ namespace Lab3
 
             return (s + str + e);
         }
-        static string CreateStr(int N)
+        static string CreateStr(int N)  //для разделительных линий
         {
             string floor = new string('-', N);
             return floor;
