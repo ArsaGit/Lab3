@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Lab3
 {
@@ -7,105 +8,85 @@ namespace Lab3
         static void Main(string[] args)
         {
             double begin = 1.1, end = 11.4;
-            int size;
             double step = 1.11;
-            double[] Y,X;
+            double[] arrY,arrX;
 
 
             //функция y=x^2+2x-3
             Console.WriteLine("Функция y=x^2+2x-3");
-            //ввод значений
-            GetInput(ref begin, ref end, ref step);
 
-            //получение кол-ва значений Х
-            size = GetSize(begin, end, step);
+            //ввод x0
+            Console.WriteLine("Введите минимальное значение Х:");
+            begin=GetDouble();
+            //ввод х
+            Console.WriteLine("Введите максимальное значение Х:");
+            end=GetDouble();
+            //ввод шага построения
+            Console.WriteLine("Введите шаг построения Х:");
+            step=GetDouble();
+
+
 
             //получение значений Х
-            X = GetX(begin, size, step);
+            arrX = GetX(begin,end, step);
 
             //получения значений Y
-            Y = GetY(X, size);
+            arrY = GetY(arrX);
 
             //вывод таблицы
-            ShowTable(X, Y, size);
+            ShowTable(arrX, arrY);
 
 
         }
 
         //метод ввода
-        static void GetVar(ref double B)
+        static double GetDouble()
         {
-            string A;
-            do
+            while (true)
             {
-                A = Console.ReadLine();
-                A = A.Replace('.', ',');            //проверка на точку
-            } while (!double.TryParse(A, out B));
-        }
-        //получение кол-ва значений функции
-        static int GetSize(double begin, double end,double step)
-        {
-            int size = 0;
-            while(begin <= end)
-            {
-                begin += step;
-                size++;
+                string str = Console.ReadLine();
+                double num;
+                if (double.TryParse(str,NumberStyles.AllowDecimalPoint,CultureInfo.InvariantCulture, out num)) return num;
             }
-            return size;
         }
 
         //начальное значение диапазона не может быть больше конечного
-        static void GetInput(ref double begin, ref double end, ref double step)
-        {
-            do
-            {
-                //ввод x0
-                Console.WriteLine("Введите минимальное значение Х:");
-                GetVar(ref begin);
-                //ввод х
-                Console.WriteLine("Введите максимальное значение Х:");
-                GetVar(ref end);
-                //ввод шага построения
-                Console.WriteLine("Введите шаг построения Х:");
-                GetVar(ref step);
-            } while (begin > end);
-        }
 
         //получение значений Х
-        static double[] GetX(double begin,int size, double step)
+        static double[] GetX(double begin, double end, double step)
         {
-            double[] X = new double[size];
-            for(int i=0;i<size;i++)
+            double[] arrX = new double[] { };
+            int j = 0;
+            for(double i=begin;i<end;i+=step)
             {
-                X[i] = begin;
-                begin += step;
+                arrX[j] = i;
+                j++;
             }
-            return X;
-
+            return arrX;
         }
 
-        //метод получения Y
-        static double[] GetY(double[] X,int size)
+        //метод получения Y / вычисление значений функции
+        static double[] GetY(double[] arrX)
         {
-            double[]  Y= new double[size];
-            for(int i=0;i<size;i++)
+            double[]  arrY= new double[arrX.Length];
+            for(int i=0;i<arrX.Length;i++)
             {
-                Y[i] = X[i]*X[i]+2*X[i]-3;
+                arrY[i] = arrX[i]*arrX[i]+2*arrX[i]-3;
             }
-            return Y;
+            return arrY;
         }
 
         //длина самого длинного элемента
-        static int GetMaxVarLength(double[] Array, int size)
+        static int GetMaxVarLength(double[] arr)
         {
-            int MaxVarLength=0;
-            for (int i = 0; i < size; i++)
+            int maxVarLength=0;
+            for (int i = 0; i < arr.Length; i++)
             {
-                Array[i] = Math.Round(Array[i], 3);
-                string L = Convert.ToString(Array[i]);
-                if (L.Length > MaxVarLength) MaxVarLength = L.Length;
+                arr[i] = Math.Round(arr[i], 3);
+                string str = Convert.ToString(arr[i]);
+                if (str.Length > maxVarLength) maxVarLength = str.Length;
             }
-            return MaxVarLength;
+            return maxVarLength;
         }
 
         //метод вывода таблицы
