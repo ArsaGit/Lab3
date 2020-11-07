@@ -50,12 +50,13 @@ namespace Lab3
             }
         }
 
-        //начальное значение диапазона не может быть больше конечного
-
         //получение значений Х
         static double[] GetX(double begin, double end, double step)
         {
-            double[] arrX = new double[] { };
+            int size = 0;
+            for (double i = begin; i < end; i += step)
+                size++;
+            double[] arrX = new double[size];
             int j = 0;
             for(double i=begin;i<end;i+=step)
             {
@@ -90,51 +91,48 @@ namespace Lab3
         }
 
         //метод вывода таблицы
-        static void ShowTable(double[] X, double[] Y, int size)
+        static void ShowTable(double[] X, double[] Y)
         {
-            int xml = GetMaxVarLength(X, size);
-            int yml = GetMaxVarLength(Y, size);
+            int xml = GetMaxVarLength(X);
+            int yml = GetMaxVarLength(Y);
 
-            
-            Console.WriteLine('|'+CreateStr(xml)+'|'+CreateStr(yml)+'|');
-            Console.WriteLine('|' + CreateStr("X",xml) + '|' + CreateStr("Y",yml) + '|');
-            Console.WriteLine('|' + CreateStr(xml) + '|' + CreateStr(yml) + '|');
-            for (int i=0;i<size;i++)
+            WriteBoxLine('┌', '─', '┬', '┐',xml, yml);
+            WriteBoxLine('│', ' ', '│', '│', "X", "Y", xml, yml);
+            WriteBoxLine('├', '─', '┼', '┤', xml, yml);
+            for (int i = 0; i < X.Length; i++)
             {
-                Console.WriteLine('|' + CreateStr(X[i],xml) + '|' + CreateStr(Y[i],yml) + '|');
+                if (i == X.Length - 1) WriteBoxLine('└', '─', '┴', '┘',xml,yml);
+                else WriteBoxLine('│', ' ', '│', '│', X[i].ToString(), Y[i].ToString(), xml, yml);
             }
-            Console.WriteLine('|' + CreateStr(xml) + '|' + CreateStr(yml) + '|');
+        }
+        static void WriteBoxLine(char beginSym, char filler, char wallSym, char endSym, string x,string y, int xml,int yml)
+        {
+            Console.Write(beginSym);
+            Console.Write(CreateStr(x,xml,filler));
+            Console.Write(wallSym);
+            Console.Write(CreateStr(y, yml, filler));
+            Console.Write(endSym);
+            Console.Write('\n');
+        }
+        static void WriteBoxLine(char beginSym, char filler, char wallSym, char endSym, int xml, int yml)
+        {
+            Console.Write(beginSym);
+            Console.Write(CreateStr("", xml, filler));
+            Console.Write(wallSym);
+            Console.Write(CreateStr("", yml, filler));
+            Console.Write(endSym);
+            Console.Write('\n');
         }
         //наполнение таблицы
-        static string CreateStr(double num,int max_length)  //для чисел
+        static string CreateStr(string str,int maxLength,char filler)
         {
-            num = Math.Round(num, 3);
-            string num_str = Convert.ToString(num);
-            int middle = num_str.Length;
-            int start=(max_length-middle)/2;
-            int end = max_length - start - middle;
-
-            string s = new string(' ', start);
-            string e = new string(' ', end);
-
-            return (s + num_str + e);
-        }
-        static string CreateStr(string str, int max_length) //для строк
-        {
-            //string num_str = Convert.ToString(num);
-            int middle = str.Length;
-            int start = (max_length - middle) / 2;
-            int end = max_length - start - middle;
-
-            string s = new string(' ', start);
-            string e = new string(' ', end);
-
-            return (s + str + e);
-        }
-        static string CreateStr(int N)  //для разделительных линий
-        {
-            string floor = new string('-', N);
-            return floor;
+            if (str.Length == maxLength) return str;
+            else
+            {
+                string temp = new string(filler, maxLength - str.Length);
+                str += temp;
+                return str;
+            }
         }
     }
 }
