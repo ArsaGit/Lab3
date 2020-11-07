@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 
 namespace Lab3
 {
@@ -25,7 +26,7 @@ namespace Lab3
             Console.WriteLine("Введите шаг построения Х:");
             step=GetDouble();
 
-
+            string input = ReadInput();
 
             //получение значений Х
             arrX = GetX(begin,end, step);
@@ -34,9 +35,10 @@ namespace Lab3
             arrY = GetY(arrX);
 
             //вывод таблицы
-            ShowTable(arrX, arrY);
+            string table=CreateTable(arrX, arrY);
+            Console.WriteLine(table);
 
-
+            WriteOutput(table);
         }
 
         //метод ввода
@@ -91,37 +93,31 @@ namespace Lab3
         }
 
         //метод вывода таблицы
-        static void ShowTable(double[] X, double[] Y)
+        static string CreateTable(double[] X, double[] Y)
         {
+            string table = "";
             int xml = GetMaxVarLength(X);
             int yml = GetMaxVarLength(Y);
 
-            WriteBoxLine('┌', '─', '┬', '┐',xml, yml);
-            WriteBoxLine('│', ' ', '│', '│', "X", "Y", xml, yml);
-            WriteBoxLine('├', '─', '┼', '┤', xml, yml);
+            table += WriteBoxLine('┌', '─', '┬', '┐',xml, yml);
+            table += WriteBoxLine('│', ' ', '│', '│', "X", "Y", xml, yml);
+            table += WriteBoxLine('├', '─', '┼', '┤', xml, yml);
             for (int i = 0; i < X.Length; i++)
             {
-                if (i == X.Length - 1) WriteBoxLine('└', '─', '┴', '┘',xml,yml);
-                else WriteBoxLine('│', ' ', '│', '│', X[i].ToString(), Y[i].ToString(), xml, yml);
+                if (i == X.Length - 1) table += WriteBoxLine('└', '─', '┴', '┘',xml,yml);
+                else table += WriteBoxLine('│', ' ', '│', '│', X[i].ToString(), Y[i].ToString(), xml, yml);
             }
+            return table;
         }
-        static void WriteBoxLine(char beginSym, char filler, char wallSym, char endSym, string x,string y, int xml,int yml)
+        static string WriteBoxLine(char beginSym, char filler, char wallSym, char endSym, string x,string y, int xml,int yml)
         {
-            Console.Write(beginSym);
-            Console.Write(CreateStr(x,xml,filler));
-            Console.Write(wallSym);
-            Console.Write(CreateStr(y, yml, filler));
-            Console.Write(endSym);
-            Console.Write('\n');
+            string str = beginSym + CreateStr(x, xml, filler)+ wallSym+ CreateStr(y, yml, filler)+endSym+'\n';
+            return str;
         }
-        static void WriteBoxLine(char beginSym, char filler, char wallSym, char endSym, int xml, int yml)
+        static string WriteBoxLine(char beginSym, char filler, char wallSym, char endSym, int xml, int yml)
         {
-            Console.Write(beginSym);
-            Console.Write(CreateStr("", xml, filler));
-            Console.Write(wallSym);
-            Console.Write(CreateStr("", yml, filler));
-            Console.Write(endSym);
-            Console.Write('\n');
+            string str = beginSym + CreateStr("", xml, filler) + wallSym + CreateStr("", yml, filler) + endSym + '\n';
+            return str;
         }
         //наполнение таблицы
         static string CreateStr(string str,int maxLength,char filler)
@@ -132,6 +128,32 @@ namespace Lab3
                 string temp = new string(filler, maxLength - str.Length);
                 str += temp;
                 return str;
+            }
+        }
+
+        //input/output
+        static string GetPath(string path = "input.txt")
+        {
+            string filePath = Environment.CurrentDirectory;
+            filePath = @filePath.Substring(0, filePath.IndexOf("bin")) + path;
+            return filePath;
+        }
+        static string ReadInput()
+        {
+            string path = GetPath();
+            string text;
+            using (StreamReader sr = new StreamReader(path))
+            {
+                text=sr.ReadToEnd();
+            }
+            return text;
+        }
+        static void WriteOutput(string table)
+        {
+            string path = GetPath("output.txt");
+            using (StreamWriter sw = new StreamWriter(path))
+            {
+                sw.Write(table);
             }
         }
     }
