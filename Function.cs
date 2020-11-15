@@ -27,13 +27,29 @@ namespace Lab3
         }
         public void GetInfo(string data)
         {
-            bool IsInputCorrect = false;
-            string[] strArr = data.Split(';', StringSplitOptions.RemoveEmptyEntries);
-            function = strArr[0];
-            IsInputCorrect = double.TryParse(strArr[1], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out step);
-            IsInputCorrect = double.TryParse(strArr[2], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out x0);
-            IsInputCorrect = double.TryParse(strArr[3], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out x1);
-            //if(!IsInputCorrect)
+            int check;
+            do
+            {
+                check = 0;
+                string[] strArr = data.Split(';', StringSplitOptions.RemoveEmptyEntries);
+                function = strArr[0];
+                if (!double.TryParse(strArr[1], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out step)) check++;
+                if (!double.TryParse(strArr[2], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out x0)) check++;
+                if (!double.TryParse(strArr[3], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out x1)) check++;
+                if (check != 0)
+                {
+                    Console.WriteLine("Введены некорректные данные!");
+                    Console.WriteLine("Введите функцию:");
+                    string functionTemp = Console.ReadLine();
+                    Console.WriteLine("Введите шаг:");
+                    string stepTemp = Console.ReadLine();
+                    Console.WriteLine("Введите начало диапазона:");
+                    string x0Temp = Console.ReadLine();
+                    Console.WriteLine("Введите конец диапазона:");
+                    string x1Temp = Console.ReadLine();
+                    InputOutput.WriteInFile($"{functionTemp};{stepTemp};{x0Temp};{x1Temp}", "input.txt");
+                }
+            } while (check!=0);
         }
         public void Print()
         {
