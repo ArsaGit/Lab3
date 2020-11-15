@@ -13,9 +13,9 @@ namespace Lab3
             filePath = filePath.Substring(0, filePath.IndexOf("bin")) + path;
             return filePath;
         }
-        static public string ReadInput()
+        static public string ReadFromFile(string file="input.txt")
         {
-            string path = GetPath();
+            string path = GetPath(file);
             string text;
             using (StreamReader sr=new StreamReader(path))
             {
@@ -23,12 +23,12 @@ namespace Lab3
             }
             return text;
         }
-        static public void WriteOutput(string table)
+        static public void WriteInFile(string content,string file="output.txt")
         {
-            string path = GetPath("output.txt");
+            string path = GetPath(file);
             using (StreamWriter sw=new StreamWriter(path))
             {
-                sw.Write(table);
+                sw.Write(content);
             }
         }
     }
