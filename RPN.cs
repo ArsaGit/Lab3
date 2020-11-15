@@ -7,7 +7,7 @@ namespace Lab3
 {
     class RPN
     {
-        static public object[] ParseExpression(string expressions)
+        static public Stack<object> ParseExpression(string expressions)
         {
             List<object> list1 = ParseText(expressions);
 
@@ -38,11 +38,7 @@ namespace Lab3
             {
                 opz.Push(stek.Pop());
             }
-
-            object[] obj = new object[opz.Count];
-            for (int i = 0; i < obj.Length; i++)
-                obj[obj.Length - i - 1] = opz.Pop();
-            return obj;
+            return opz;
         }
         static List<object> ParseText(string str)
         {
