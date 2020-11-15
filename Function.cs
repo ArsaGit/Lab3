@@ -27,11 +27,13 @@ namespace Lab3
         }
         public void GetInfo(string data)
         {
+            bool IsInputCorrect = false;
             string[] strArr = data.Split(';', StringSplitOptions.RemoveEmptyEntries);
             function = strArr[0];
-            step = Convert.ToDouble(strArr[1], System.Globalization.NumberFormatInfo.InvariantInfo);
-            x0 = Convert.ToDouble(strArr[2],System.Globalization.NumberFormatInfo.InvariantInfo);
-            x1 = Convert.ToDouble(strArr[3],System.Globalization.NumberFormatInfo.InvariantInfo);
+            IsInputCorrect = double.TryParse(strArr[1], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out step);
+            IsInputCorrect = double.TryParse(strArr[2], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out x0);
+            IsInputCorrect = double.TryParse(strArr[3], System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out x1);
+            //if(!IsInputCorrect)
         }
         public void Print()
         {
@@ -39,5 +41,6 @@ namespace Lab3
             Console.WriteLine($"step={step}");
             Console.WriteLine($"Range x=[{x0};{x1}]");
         }
+
     }
 }
