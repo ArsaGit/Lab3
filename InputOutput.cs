@@ -31,5 +31,21 @@ namespace Lab3
                 sw.Write(content);
             }
         }
+        static public bool IsInputCorrect(string number)
+        {
+            double num;
+            bool isInputCorrect = true;
+            if (!double.TryParse(number, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out num)) isInputCorrect = false;
+            return isInputCorrect;
+        }
+        static public double GetDouble(string number="")
+        {
+            double num;
+            do
+            {
+                if (number == "") number = Console.ReadLine();
+            } while (!double.TryParse(number, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.NumberFormatInfo.InvariantInfo, out num));
+            return num;
+        }
     }
 }
