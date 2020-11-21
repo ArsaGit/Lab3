@@ -7,8 +7,12 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
-            
-
+            string data = InputOutput.ReadFromFile();
+            Function func = new Function();
+            func.GetInfo(data);
+            object[] rpn = RPN.ParseExpression(func.function);
+            foreach (object o in rpn)
+                Console.WriteLine(o);
         }
     }
 }
