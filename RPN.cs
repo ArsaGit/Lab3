@@ -16,7 +16,7 @@ namespace Lab3
 
             foreach (object element in list1)
             {
-                if (Information.IsNumeric(element)) opz.Push(element);
+                if (Information.IsNumeric(element) || element.Equals('X')) opz.Push(element);
                 if (element.Equals('(')) stek.Push(Convert.ToChar(element));
                 else if (stek.Count != 0 && element.Equals(')'))
                 {
@@ -46,28 +46,28 @@ namespace Lab3
         static public List<object> ParseText(string str)
         {
             List<object> list = new List<object>();
-
-            for (int i = 0; i < str.Length; i++)
+            str = str.ToUpper();
+            int i = 0;
+            while(i < str.Length)
             {
-                string element = "";
+                
                 if (char.IsDigit(str[i]))
                 {
-                    while (i <= str.Length - 1 && (char.IsDigit(str[i]) || str[i].Equals(',') || str[i].Equals('.')))
+                    string element = "";
+                    while (i < str.Length && (char.IsDigit(str[i]) || str[i].Equals(',') || str[i].Equals('.')))
                     {
                         element += str[i];
                         i++;
                     }
+                    double num;
+                    if (!element.Equals("") &&
+                        double.TryParse(element, System.Globalization.NumberStyles.AllowDecimalPoint,
+                        System.Globalization.CultureInfo.InvariantCulture, out num)) list.Add(num);
                 }
-                double num;
-                if (!element.Equals("") &&
-                    double.TryParse(element, System.Globalization.NumberStyles.AllowDecimalPoint,
-                    System.Globalization.CultureInfo.InvariantCulture, out num)) list.Add(num);
-                else if (str[i].Equals('+') || str[i].Equals('*') ||
-                   str[i].Equals('-') || str[i].Equals('/') ||
-                   str[i].Equals('(') || str[i].Equals(')') ||
-                   str[i].Equals('^') || str[i].Equals('X'))
+                else
                 {
-                    list.Add(str[i]);
+                    if(str[i]!=' ')list.Add(str[i]);
+                    i++;
                 }
 
             }
