@@ -52,7 +52,7 @@ namespace Lab3
                 string element = "";
                 if (char.IsDigit(str[i]))
                 {
-                    while (i<=str.Length-1 && (char.IsDigit(str[i]) || str[i].Equals(',') || str[i].Equals('.')))
+                    while (i <= str.Length - 1 && (char.IsDigit(str[i]) || str[i].Equals(',') || str[i].Equals('.')))
                     {
                         element += str[i];
                         i++;
@@ -80,6 +80,39 @@ namespace Lab3
             else if (operation.Equals('*') || operation.Equals('/')) priority = 2;
             else priority = 1;
             return priority;
+        }
+        static public double Calculate(double number, object[] rpn)
+        {
+            Stack<object> stack = new Stack<object>();
+            for (int i = 0; i < rpn.Length; i++)
+            {
+                if (Information.IsNumeric(rpn[i])) stack.Push(rpn[i]);
+                else if (rpn[i].Equals('X')) stack.Push(number);
+                else
+                {
+                    double num2 = Convert.ToDouble(stack.Pop());
+                    double num1 = Convert.ToDouble(stack.Pop());
+                    switch (rpn[i])
+                    {
+                        case '+':
+                            stack.Push(num1 + num2);
+                            break;
+                        case '-':
+                            stack.Push(num1 - num2);
+                            break;
+                        case '*':
+                            stack.Push(num1 * num2);
+                            break;
+                        case '/':
+                            stack.Push(num1 / num2);
+                            break;
+                        case '^':
+                            stack.Push(Math.Pow(num1, num2));
+                            break;
+                    }
+                }
+            }
+            return Convert.ToDouble(stack.Pop());
         }
     }
 }
