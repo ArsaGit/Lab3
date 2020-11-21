@@ -40,7 +40,7 @@ namespace Lab3
             }
             return opz;
         }
-        static List<object> ParseText(string str)
+        static public List<object> ParseText(string str)
         {
             List<object> list = new List<object>();
 
@@ -49,7 +49,7 @@ namespace Lab3
                 string element = "";
                 if (char.IsDigit(str[i]))
                 {
-                    while (char.IsDigit(str[i]) || str[i].Equals(',') || str[i].Equals('.'))
+                    while (i<=str.Length-1 && (char.IsDigit(str[i]) || str[i].Equals(',') || str[i].Equals('.')))
                     {
                         element += str[i];
                         i++;
@@ -59,10 +59,10 @@ namespace Lab3
                 if (!element.Equals("") &&
                     double.TryParse(element, System.Globalization.NumberStyles.AllowDecimalPoint,
                     System.Globalization.CultureInfo.InvariantCulture, out num)) list.Add(num);
-                if (str[i].Equals('+') || str[i].Equals('*') ||
+                else if (str[i].Equals('+') || str[i].Equals('*') ||
                    str[i].Equals('-') || str[i].Equals('/') ||
                    str[i].Equals('(') || str[i].Equals(')') ||
-                   str[i].Equals('^'))
+                   str[i].Equals('^') || str[i].Equals('X'))
                 {
                     list.Add(str[i]);
                 }
